@@ -1,0 +1,9 @@
+---
+bot:
+  build: .
+  volumes:
+    - .:/usr/src/app
+  environment:
+    - TELEGRAM_BOT_API_TOKEN=
+    - AUTHORIZED_USERS=
+    - PHOTOS_PATH=/photos

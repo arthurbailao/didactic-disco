@@ -1,0 +1,15 @@
+---
+pt-BR:
+  start_message: >
+    Oi %{first_name}, muito prazer! Eu sou um presente de dia dos namorados
+    atrasado e existo pra te fazer feliz. Eu não sou tão esperto (ainda), mas tenho
+    algumas fotos legais e tb sei algumas frases interessantes. Sempre que vc digitar
+    /foto eu te mando uma diferente. E se vc escrever /frase vou te mandar algumas
+    in english, ok?
+  unauthorized_message: 'Foi mal %{first_name}, mas sirvo a apenas uma pessoa...'
+  error_to_get_quote: >
+    Ixxx deu ruim, não consegui pensar em uma frase agora...
+  quote_prefix_1: O que acha dessa?
+  quote_prefix_2: Já conhecia essa aqui?
+  quote_prefix_3: 'Olha só essa:'
+  fallback_message: '%{first_name} não consigo entender isso que vc disse :('
