@@ -13,3 +13,4 @@ pt-BR:
   quote_prefix_2: Já conhecia essa aqui?
   quote_prefix_3: 'Olha só essa:'
   fallback_message: '%{first_name} não consigo entender isso que vc disse :('
+  generic_error_message: Ops, deu um erro inesperado aqui

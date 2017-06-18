@@ -9,12 +9,15 @@ class BotHandler
   end
 
   def handle(message)
-    return send_unauthorized_message(message) unless authorized?(message.from)
+    return send_message('unauthorized_message', message) unless authorized?(message.from)
 
     case message
     when Telegram::Bot::Types::Message
       @message_handler.handle(message)
     end
+  rescue => ex
+    STDERR.puts ex
+    send_message('generic_error_message', message)
   end
 
   private
@@ -24,8 +27,8 @@ class BotHandler
     users.include?(user.username)
   end
 
-  def send_unauthorized_message(message)
-    text = I18n.t('unauthorized_message', message.from.to_h)
+  def send_message(type, message)
+    text = I18n.t(type, message.from.to_h)
     @bot.api.send_message(chat_id: message.chat.id, text: text)
   end
 end

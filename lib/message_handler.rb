@@ -2,13 +2,18 @@
 
 require_relative 'quotes_service'
 require_relative 'photos_service'
+require_relative 'imgur_service'
 
 class MessageHandler
   COMMANDS = {
     '/start' => :start,
     '/stop'  => :stop,
     '/foto'  => :photo,
-    '/frase' => :quote
+    '/frase' => :quote,
+    '🐶'     => :puppies,
+    '🐕'     => :puppies,
+    '🐩'     => :puppies,
+    '/imgur' => :imgur
   }.freeze
 
   def initialize(bot)
@@ -19,7 +24,8 @@ class MessageHandler
   attr_reader :bot, :photos
 
   def handle(message)
-    method = COMMANDS[message.text] || :fallback
+    cmd = message.text.split(' ')[0]
+    method = COMMANDS[cmd] || :fallback
     send(method, message)
   end
 
@@ -44,6 +50,19 @@ class MessageHandler
     bot.api.send_message(
       chat_id: message.chat.id, text: response.text, parse_mode: 'Markdown'
     )
+  end
+
+  def puppies(message)
+    imgur(message, 'puppies')
+  end
+
+  def imgur(message, query = nil)
+    bot.api.send_chat_action(chat_id: message.chat.id, action: 'upload_photo')
+    subreddit = query || message.text.split(' ', 2)[1]
+    service = ImgurService.new(subreddit)
+    photo = service.generate
+    bot.api.send_photo(chat_id: message.chat.id, photo: photo, caption: service.photo[:title])
+    service.unlink
   end
 
   def fallback(message)
