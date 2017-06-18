@@ -39,7 +39,7 @@ class ImgurService
   def load_photo(photo)
     request = Typhoeus::Request.new(photo_url(photo))
     request.on_headers do |response|
-      raise "Request failed" if response.return_code != :ok
+      raise "Request failed" if response.response_code != 200
     end
     request.on_body { |chunk| @tempfile.write(chunk) }
     request.on_complete { @tempfile.close }

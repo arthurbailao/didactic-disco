@@ -4,6 +4,8 @@ require_relative 'quotes_service'
 require_relative 'photos_service'
 require_relative 'imgur_service'
 
+require 'retryable'
+
 class MessageHandler
   COMMANDS = {
     '/start' => :start,
@@ -57,12 +59,14 @@ class MessageHandler
   end
 
   def imgur(message, query = nil)
-    bot.api.send_chat_action(chat_id: message.chat.id, action: 'upload_photo')
-    subreddit = query || message.text.split(' ', 2)[1]
-    service = ImgurService.new(subreddit)
-    photo = service.generate
-    bot.api.send_photo(chat_id: message.chat.id, photo: photo, caption: service.photo[:title])
-    service.unlink
+    Retryable.retryable(tries: 3, sleep: 0.1, on: [RuntimeError]) do
+      bot.api.send_chat_action(chat_id: message.chat.id, action: 'upload_photo')
+      subreddit = query || message.text.split(' ', 2)[1]
+      service = ImgurService.new(subreddit)
+      photo = service.generate
+      bot.api.send_photo(chat_id: message.chat.id, photo: photo, caption: service.photo[:title])
+      service.unlink
+    end
   end
 
   def fallback(message)

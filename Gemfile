@@ -8,6 +8,7 @@ gem 'telegram-bot-ruby'
 gem 'i18n'
 gem 'oj'
 gem 'typhoeus'
+gem 'retryable'
 
 group :development do
   gem 'rubocop'
